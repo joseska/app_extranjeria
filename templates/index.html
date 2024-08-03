@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Generador de Información</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .container {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+        .column {
+            width: 48%;
+        }
+        input[type="text"], textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            box-sizing: border-box;
+        }
+        .readonly {
+            pointer-events: auto;
+            background-color: #f0f0f0;
+            cursor: pointer;
+        }
+        .line {
+            border-bottom: 1px solid #ccc;
+            margin: 20px 0;
+        }
+        .section-title {
+            font-size: 18px;
+            font-weight: bold;
+            margin-top: 20px;
+        }
+        .section-line {
+            border-bottom: 1px solid #ccc;
+            width: 50%;
+            margin: 10px 0;
+        }
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            font-size: 16px;
+            color: #fff;
+            background-color: #007BFF;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            margin-right: 10px;
+        }
+        .btn:hover {
+            background-color: #0056b3;
+        }
+        .btn-secondary {
+            background-color: #6c757d;
+        }
+        .btn-secondary:hover {
+            background-color: #5a6268;
+        }
+        .generated-container {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+        .generated-container-inner {
+            display: flex;
+            justify-content: space-between;
+        }
+        textarea {
+            height: 120px; /* Ajusta la altura según sea necesario */
+        }
+        #boton_interno {
+            background: #6c757d;
+            border: 0;
+            border-radius: 5px;
+            color: white;
+            padding: 7px;
+            position: absolute;
+            right: 0px;
+            top: 7px;
+            font-size: 10px;
+        }
+
+        .pt-site-footer {
+            position: relative;
+            display: inline-block;
+            width: 100%;
+        }
+    </style>
+    <script>
+        function copyToClipboard(element) {
+            navigator.clipboard.writeText(element.value).catch(function(err) {
+                console.error('Error al copiar al portapapeles: ', err);
+            });
+        }
+
+        function clearFields() {
+            document.getElementById('expediente').value = '';
+            document.getElementById('procedimiento').value = '';
+            document.getElementById('nombre').value = '';
+            document.getElementById('nie').value = '';
+            document.getElementById('nig').value = '380384532024000';
+
+            document.getElementById('identificador_gen').value = '';
+            document.getElementById('codigo_procedimiento_gen').value = '';
+            document.getElementById('organos_gen').value = '';
+            document.getElementById('interesado_gen').value = '';
+            document.getElementById('nombre_natural_gen').value = '';
+            document.getElementById('correo_gen').value = '';
+            document.getElementById('nig_gen').value = '';
+            document.getElementById('asunto_gen').value = '';
+            document.getElementById('unidad_organica_gen').value = '';
+            document.getElementById('procedimiento_num_gen').value = '';
+            document.getElementById('destinatarios_gen').value = '';
+            document.getElementById('texto_personalizado_gen').value = '';
+        }
+
+        await function formatExpediente() {
+            let expediente = document.getElementById('expediente').value;
+            if (expediente.length > 2 && expediente.indexOf('/') === -1) {
+                document.getElementById('expediente').value = expediente.slice(0, 2) + '/' + expediente.slice(2);
+            }
+        }
+
+        await function formatProcedimiento() {
+            let procedimiento = document.getElementById('procedimiento').value;
+            let len = procedimiento.length;
+            if (len > 5 && procedimiento.indexOf('.') === -1) {
+                document.getElementById('procedimiento').value = procedimiento.slice(0, len - 5) + '.' + procedimiento.slice(len - 5, len - 1) + '.' + procedimiento.slice(len - 1);
+            }
+        }
+    </script>
+
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.12.1/css/all.css" crossorigin="anonymous">
+    
+</head>
+<body>
+    <h1>Generador de Información</h1>
+    <form method="POST">
+        <div class="container">
+            <div class="column">
+                <label for="expediente">Expediente:</label><br>
+                <!-- <input type="text" id="expediente" name="expediente" tabindex="1" value="{{ expediente }}" required onblur="formatExpediente()">
+                <button type="button" class="copy-button" onclick="pasteClipboardContent()">Pegar</button><br> -->
+
+                <div class="pt-site-footer">
+                    <input type="text" id="expediente" name="expediente" tabindex="1" value="{{ expediente }}" required onblur="formatExpediente()">
+                    <button type="button" id ="boton_interno" class="btn btn-secondary">...</button>
+                </div><br>
+
+
+                
+                <label for="nombre">Nombre:</label><br>
+                <input type="text" id="nombre" name="nombre" tabindex="3" value="{{ nombre }}" required><br>
+                
+                <label for="nig">NIG:</label><br>
+                <input type="text" id="nig" name="nig" tabindex="5" value="380384532024000" required><br>
+            </div>
+            <div class="column">
+                <label for="procedimiento">Procedimiento:</label><br>
+                <input type="text" id="procedimiento" name="procedimiento" tabindex="2" value="{{ procedimiento }}" required onblur="formatProcedimiento()"><br>
+                
+                <label for="nie">NIE:</label><br>
+                <input type="text" id="nie" name="nie" tabindex="4" value="{{ nie }}" required><br>
+            </div>
+        </div>
+        <button type="submit" class="btn" tabindex="6">Generar</button>
+        <button type="button" class="btn btn-secondary" onclick="clearFields()" tabindex="7">Limpiar</button>
+    </form>
+    <div class="line"></div>
+    <h3 class="section-title">Sección Inside - Metadatos</h3>
+    <div class="generated-container">
+        <div class="column">
+            <label for="identificador_gen">Identificador:</label><br>
+            <input type="text" id="identificador_gen" class="readonly" value="{{ identificador }}" onclick="copyToClipboard(this)" readonly tabindex="13"><br>
+            
+            <label for="codigo_procedimiento_gen">Código Procedimiento:</label><br>
+            <input type="text" id="codigo_procedimiento_gen" class="readonly" value="{{ codigo_procedimiento }}" onclick="copyToClipboard(this)" readonly tabindex="14"><br>
+            
+            <label for="organos_gen">Órganos:</label><br>
+            <input type="text" id="organos_gen" class="readonly" value="EA0040322" onclick="copyToClipboard(this)" readonly tabindex="15"><br>
+        </div>
+        <div class="column">
+            <label for="interesado_gen">Interesado:</label><br>
+            <input type="text" id="interesado_gen" class="readonly" value="{{ nie }}" onclick="copyToClipboard(this)" readonly tabindex="16"><br>
+            
+            <label for="nombre_natural_gen">Nombre Natural:</label><br>
+            <input type="text" id="nombre_natural_gen" class="readonly" value="{{ nombre }}" onclick="copyToClipboard(this)" readonly tabindex="17"><br>
+        </div>
+    </div>
+    <div class="section-line"></div>
+    <h3 class="section-title">Sección Inside - Credenciales Acceso</h3>
+    <div class="generated-container">
+        <div class="column">
+            <label for="correo_gen">Correo:</label><br>
+            <input type="text" id="correo_gen" class="readonly" value="recursos-extranjeria.sctenerife@correo.gob.es" onclick="copyToClipboard(this)" readonly tabindex="18"><br>
+
+            <label for="nig_gen">NIG:</label><br>
+            <input type="text" id="nig_gen" class="readonly" value="{{ nig }}" onclick="copyToClipboard(this)" readonly tabindex="12"><br>
+
+            <label for="asunto_gen">Asunto:</label><br>
+            <input type="text" id="asunto_gen" class="readonly" value="{{ asunto }}" onclick="copyToClipboard(this)" readonly tabindex="21"><br>
+        </div>
+        <div class="column">
+            <label for="unidad_organica_gen">Unidad Orgánica o Juzgado:</label><br>
+            <input type="text" id="unidad_organica_gen" class="readonly" value="{{ unidad_organica }}" onclick="copyToClipboard(this)" readonly tabindex="19"><br>
+
+            <label for="procedimiento_num_gen">Número de Procedimiento:</label><br>
+            <input type="text" id="procedimiento_num_gen" class="readonly" value="{{ procedimiento_num_padded }}" onclick="copyToClipboard(this)" readonly tabindex="20"><br>
+        </div>
+    </div>
+    <div class="section-line"></div>
+    <h3 class="section-title">Almacén</h3>
+    <div class="generated-container">
+        <div class="column">
+            <label for="destinatarios_gen">Destinatarios:</label><br>
+            <input type="text" id="destinatarios_gen" class="readonly" value="aetenerife@mjusticia.es" onclick="copyToClipboard(this)" readonly tabindex="22"><br>
+        </div>
+        <div class="column">
+            <label for="texto_personalizado_gen">Texto Personalizado:</label><br>
+            <textarea id="texto_personalizado_gen" class="readonly" onclick="copyToClipboard(this)" readonly tabindex="23">{{ texto_personalizado }}</textarea><br>
+        </div>
+    </div>
+
+
+    <script>
+
+        async function pasteClipboardContent() {
+            try {
+                const text = await navigator.clipboard.readText();
+                const parts = text.split('\t');
+                if (parts.length === 2) {
+                    document.getElementById('expediente').value = parts[0];
+                    document.getElementById('procedimiento').value = parts[1];
+
+                    const expedienteParts = parts[0].split('/');
+                    const expedienteYearCode = expedienteParts[0];
+                    const expedienteNumCode = expedienteParts[1].padStart(7, '0');
+
+                    // const exp_largo = '380020${expedienteYearCode}${expedienteNumCode}';
+                    const exp_largo = "380020"+expedienteYearCode+expedienteNumCode;
+                    await navigator.clipboard.writeText(exp_largo);
+                    alert('exp_largo copiado al portapapeles.');
+
+
+                } else {
+                    alert('El contenido del portapapeles no tiene el formato esperado.');
+                }
+            } catch (error) {
+                console.error('Error al leer el portapapeles:', error);
+            }
+        }
+
+
+        // async function pasteClipboardContent2() {
+        //     try {
+        //         const text = await navigator.clipboard.readText();
+        //         const [expediente, procedimiento] = text.split('\t');
+        //         document.getElementById("expediente").value = expediente;
+        //         document.getElementById("procedimiento").value = procedimiento;
+        //         formatExpediente();
+        //         formatProcedimiento();
+
+        //         const expedienteParts = expediente.split('/');
+        //         const expedienteYearCode = expedienteParts[0];
+        //         const expedienteNumCode = expedienteParts[1].padStart(7, '0');
+
+        //         const codigo_procedimiento_2 = `380020${expedienteYearCode}${expedienteNumCode}`;
+        //         await navigator.clipboard.writeText(codigo_procedimiento_2);
+        //         alert('Código Procedimiento 2 copiado al portapapeles.');
+        //     } catch (err) {
+        //         console.error('Error al pegar contenido del portapapeles: ', err);
+        //     }
+        // }
+
+
+        
+
+
+        document.getElementById('boton_interno').addEventListener('click', async () => {
+            await pasteClipboardContent(); // Llama a la función para pegar el contenido del portapapeles
+            formatExpediente(); // Llama a la función formatExpediente después de que se complete la anterior
+            formatProcedimiento(); // Llama a la función formatProcedimiento después de que se complete la anterior
+        
+            await navigator.clipboard.writeText(text);
+
+        });
+
+    </script>
+
+</body>
+</html>
