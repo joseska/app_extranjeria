@@ -136,7 +136,7 @@
         }
     </script>
 
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.12.1/css/all.css" crossorigin="anonymous">
+    <!-- <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.12.1/css/all.css" crossorigin="anonymous"> -->
     
 </head>
 <body>
@@ -145,8 +145,6 @@
         <div class="container">
             <div class="column">
                 <label for="expediente">Expediente:</label><br>
-                <!-- <input type="text" id="expediente" name="expediente" tabindex="1" value="{{ expediente }}" required onblur="formatExpediente()">
-                <button type="button" class="copy-button" onclick="pasteClipboardContent()">Pegar</button><br> -->
 
                 <div class="pt-site-footer">
                     <input type="text" id="expediente" name="expediente" tabindex="1" value="{{ expediente }}" required onblur="formatExpediente()">
@@ -178,16 +176,17 @@
         <div class="column">
             <label for="identificador_gen">Identificador:</label><br>
             <input type="text" id="identificador_gen" class="readonly" value="{{ identificador }}" onclick="copyToClipboard(this)" readonly tabindex="13"><br>
-            
-            <label for="codigo_procedimiento_gen">Código Procedimiento:</label><br>
-            <input type="text" id="codigo_procedimiento_gen" class="readonly" value="{{ codigo_procedimiento }}" onclick="copyToClipboard(this)" readonly tabindex="14"><br>
+
+            <label for="interesado_gen">Interesado:</label><br>
+            <input type="text" id="interesado_gen" class="readonly" value="{{ nie }}" onclick="copyToClipboard(this)" readonly tabindex="16"><br>
             
             <label for="organos_gen">Órganos:</label><br>
             <input type="text" id="organos_gen" class="readonly" value="EA0040322" onclick="copyToClipboard(this)" readonly tabindex="15"><br>
         </div>
         <div class="column">
-            <label for="interesado_gen">Interesado:</label><br>
-            <input type="text" id="interesado_gen" class="readonly" value="{{ nie }}" onclick="copyToClipboard(this)" readonly tabindex="16"><br>
+            <label for="codigo_procedimiento_gen">Código Procedimiento:</label><br>
+            <input type="text" id="codigo_procedimiento_gen" class="readonly" value="{{ codigo_procedimiento }}" onclick="copyToClipboard(this)" readonly tabindex="14"><br>
+            
             
             <label for="nombre_natural_gen">Nombre Natural:</label><br>
             <input type="text" id="nombre_natural_gen" class="readonly" value="{{ nombre }}" onclick="copyToClipboard(this)" readonly tabindex="17"><br>
@@ -245,7 +244,6 @@
                     // const exp_largo = '380020${expedienteYearCode}${expedienteNumCode}';
                     const exp_largo = "380020"+expedienteYearCode+expedienteNumCode;
                     await navigator.clipboard.writeText(exp_largo);
-                    alert('exp_largo copiado al portapapeles.');
 
 
                 } else {
