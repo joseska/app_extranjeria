@@ -223,6 +223,10 @@
                     const expedienteNumCode = expedienteParts[1].padStart(7, '0');
 
                     const expLargo = "380020" + expedienteYearCode + expedienteNumCode;
+
+                    // Mando primero el Numero de Expediente a ver si se me queda grabado en Clipjump
+                    await navigator.clipboard.writeText(parts[0]);
+                    // Ahora el expediente largo
                     await navigator.clipboard.writeText(expLargo);
 
                 } else {
