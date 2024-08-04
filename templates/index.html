@@ -74,7 +74,7 @@
         textarea {
             height: 120px; /* Ajusta la altura según sea necesario */
         }
-        #boton_interno {
+        .boton_interno {
             background: #6c757d;
             border: 0;
             border-radius: 5px;
@@ -120,24 +120,65 @@
             document.getElementById('texto_personalizado_gen').value = '';
         }
 
-        await function formatExpediente() {
+        async function formatExpediente() {
             let expediente = document.getElementById('expediente').value;
             if (expediente.length > 2 && expediente.indexOf('/') === -1) {
                 document.getElementById('expediente').value = expediente.slice(0, 2) + '/' + expediente.slice(2);
             }
         }
 
-        await function formatProcedimiento() {
+        async function formatProcedimiento() {
             let procedimiento = document.getElementById('procedimiento').value;
             let len = procedimiento.length;
             if (len > 5 && procedimiento.indexOf('.') === -1) {
                 document.getElementById('procedimiento').value = procedimiento.slice(0, len - 5) + '.' + procedimiento.slice(len - 5, len - 1) + '.' + procedimiento.slice(len - 1);
             }
         }
+
+        async function pasteClipboardContent() {
+            try {
+                const text = await navigator.clipboard.readText();
+                const parts = text.split('\t');
+                if (parts.length === 2) {
+                    document.getElementById('expediente').value = parts[0];
+                    document.getElementById('procedimiento').value = parts[1];
+
+                    const expedienteParts = parts[0].split('/');
+                    const expedienteYearCode = expedienteParts[0];
+                    const expedienteNumCode = expedienteParts[1].padStart(7, '0');
+
+                    const expLargo = "380020" + expedienteYearCode + expedienteNumCode;
+                    await navigator.clipboard.writeText(expLargo);
+
+                } else {
+                    alert('El contenido del portapapeles no tiene el formato esperado.');
+                }
+            } catch (error) {
+                console.error('Error al leer el portapapeles:', error);
+            }
+        }
+
+        document.getElementById('boton_interno').addEventListener('click', async () => {
+            await pasteClipboardContent();
+            formatExpediente();
+            formatProcedimiento();
+            const codigoProcedimiento2 = document.getElementById('codigo_procedimiento_gen').value;
+            await navigator.clipboard.writeText(codigoProcedimiento2);
+        });
+
+        document.getElementById('boton_interno_2').addEventListener('click', () => {
+            copyToClipboard(document.getElementById('procedimiento'));
+        });
+
+        document.querySelectorAll('.readonly').forEach(element => {
+            element.addEventListener('click', () => copyToClipboard(element));
+        });
     </script>
 
-    <!-- <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.12.1/css/all.css" crossorigin="anonymous"> -->
-    
+    <!-- Add icon library -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+
 </head>
 <body>
     <h1>Generador de Información</h1>
@@ -145,13 +186,10 @@
         <div class="container">
             <div class="column">
                 <label for="expediente">Expediente:</label><br>
-
                 <div class="pt-site-footer">
                     <input type="text" id="expediente" name="expediente" tabindex="1" value="{{ expediente }}" required onblur="formatExpediente()">
-                    <button type="button" id ="boton_interno" class="btn btn-secondary">...</button>
+                    <button type="button" id="boton_interno" class="boton_interno btn btn-secondary"><i class="fa fa-clone"></i></button>
                 </div><br>
-
-
                 
                 <label for="nombre">Nombre:</label><br>
                 <input type="text" id="nombre" name="nombre" tabindex="3" value="{{ nombre }}" required><br>
@@ -161,7 +199,10 @@
             </div>
             <div class="column">
                 <label for="procedimiento">Procedimiento:</label><br>
-                <input type="text" id="procedimiento" name="procedimiento" tabindex="2" value="{{ procedimiento }}" required onblur="formatProcedimiento()"><br>
+                <div class="pt-site-footer">
+                    <input type="text" id="procedimiento" name="procedimiento" tabindex="2" value="{{ procedimiento }}" required onblur="formatProcedimiento()">
+                    <button type="button" id="boton_interno_2" class="boton_interno btn btn-secondary"><i class="fa fa-clone"></i></button>
+                </div><br>
                 
                 <label for="nie">NIE:</label><br>
                 <input type="text" id="nie" name="nie" tabindex="4" value="{{ nie }}" required><br>
@@ -171,6 +212,9 @@
         <button type="button" class="btn btn-secondary" onclick="clearFields()" tabindex="7">Limpiar</button>
     </form>
     <div class="line"></div>
+
+
+
     <h3 class="section-title">Sección Inside - Metadatos</h3>
     <div class="generated-container">
         <div class="column">
@@ -228,7 +272,6 @@
 
 
     <script>
-
         async function pasteClipboardContent() {
             try {
                 const text = await navigator.clipboard.readText();
@@ -241,7 +284,6 @@
                     const expedienteYearCode = expedienteParts[0];
                     const expedienteNumCode = expedienteParts[1].padStart(7, '0');
 
-                    // const exp_largo = '380020${expedienteYearCode}${expedienteNumCode}';
                     const exp_largo = "380020"+expedienteYearCode+expedienteNumCode;
                     await navigator.clipboard.writeText(exp_largo);
 
@@ -254,39 +296,14 @@
             }
         }
 
-
-        // async function pasteClipboardContent2() {
-        //     try {
-        //         const text = await navigator.clipboard.readText();
-        //         const [expediente, procedimiento] = text.split('\t');
-        //         document.getElementById("expediente").value = expediente;
-        //         document.getElementById("procedimiento").value = procedimiento;
-        //         formatExpediente();
-        //         formatProcedimiento();
-
-        //         const expedienteParts = expediente.split('/');
-        //         const expedienteYearCode = expedienteParts[0];
-        //         const expedienteNumCode = expedienteParts[1].padStart(7, '0');
-
-        //         const codigo_procedimiento_2 = `380020${expedienteYearCode}${expedienteNumCode}`;
-        //         await navigator.clipboard.writeText(codigo_procedimiento_2);
-        //         alert('Código Procedimiento 2 copiado al portapapeles.');
-        //     } catch (err) {
-        //         console.error('Error al pegar contenido del portapapeles: ', err);
-        //     }
-        // }
-
-
-        
-
-
         document.getElementById('boton_interno').addEventListener('click', async () => {
             await pasteClipboardContent(); // Llama a la función para pegar el contenido del portapapeles
             formatExpediente(); // Llama a la función formatExpediente después de que se complete la anterior
             formatProcedimiento(); // Llama a la función formatProcedimiento después de que se complete la anterior
-        
-            await navigator.clipboard.writeText(text);
-
+            // await navigator.clipboard.writeText(text); 
+        });
+        document.getElementById('boton_interno_2').addEventListener('click', () => {
+            copyToClipboard(document.getElementById('procedimiento'));
         });
 
     </script>
