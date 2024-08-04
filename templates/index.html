@@ -104,14 +104,14 @@
             document.getElementById('procedimiento').value = '';
             document.getElementById('nombre').value = '';
             document.getElementById('nie').value = '';
-            document.getElementById('nig').value = '380384532024000';
+            document.getElementById('nig').value = '';
 
             document.getElementById('identificador_gen').value = '';
             document.getElementById('codigo_procedimiento_gen').value = '';
-            document.getElementById('organos_gen').value = '';
+            // document.getElementById('organos_gen').value = '';
             document.getElementById('interesado_gen').value = '';
             document.getElementById('nombre_natural_gen').value = '';
-            document.getElementById('correo_gen').value = '';
+            // document.getElementById('correo_gen').value = '';
             document.getElementById('nig_gen').value = '';
             document.getElementById('asunto_gen').value = '';
             document.getElementById('unidad_organica_gen').value = '';
@@ -134,6 +134,81 @@
                 document.getElementById('procedimiento').value = procedimiento.slice(0, len - 5) + '.' + procedimiento.slice(len - 5, len - 1) + '.' + procedimiento.slice(len - 1);
             }
         }
+
+        // function validateNIGLength() {
+        //     const nig = document.getElementById('nig').value;
+        //     if (nig.length !== 4) {
+        //         alert('El NIG debe tener exactamente 4 dígitos.');
+        //         return false;
+        //     }
+        //     return true;
+        // }
+
+        // function validateNIGLength() {
+        //     const nig = document.getElementById('nig').value;
+        //     if (nig.length !== 4) {
+        //         alert('El NIG debe tener exactamente 4 dígitos.');
+        //         return false;
+        //     }
+
+        //     const expediente = document.getElementById('expediente').value;
+        //     const expedienteRegex = /^\d{2}\/\d+$/;
+        //     if (!expedienteRegex.test(expediente)) {
+        //         alert('El Expediente debe tener el formato correcto: dos dígitos + "/" + dígitos indeterminados.');
+        //         return false;
+        //     }
+
+        //     const procedimiento = document.getElementById('procedimiento').value;
+        //     const procedimientoRegex = /^\d+\.\d{4}\.\d{1}$/;
+
+        //     if (!procedimientoRegex.test(procedimiento)) {
+        //         alert('El Procedimiento debe tener el formato correcto: números + "." + cuatro dígitos + "." + números.');
+        //         return false;
+        //     }
+
+        //     return true;
+        // }
+
+        function validateNIGLength() {
+            const nigInput = document.getElementById('nig');
+            const nigValue = nigInput.value.trim();
+            const nigRegex = /^\d{4}$/;
+
+            const expedienteInput = document.getElementById('expediente');
+            const expedienteValue = expedienteInput.value.trim();
+            const expedienteRegex = /^\d{2}\/\d+$/;
+
+            const procedimientoInput = document.getElementById('procedimiento');
+            const procedimientoValue = procedimientoInput.value.trim();
+            const procedimientoRegex = /^\d+\.\d{4}\.\d{1}$/;
+
+            const nieInput = document.getElementById('nie');
+            const nieValue = nieInput.value.trim();
+            const nieRegex = /^[XYZ]\d{7}[A-Z]$/;
+
+            if (!nigRegex.test(nigValue)) {
+                alert('NIG debe tener exactamente 4 dígitos.');
+                return false;
+            }
+
+            if (!expedienteRegex.test(expedienteValue)) {
+                alert('Expediente debe tener el formato NN/N+.');
+                return false;
+            }
+
+            if (!procedimientoRegex.test(procedimientoValue)) {
+                alert('Procedimiento debe tener el formato N+.NNNN.N.');
+                return false;
+            }
+
+            if (!nieRegex.test(nieValue)) {
+                alert('NIE debe tener el formato X1234567A, Y1234567B o Z1234567C.');
+                return false;
+            }
+
+            return true;
+        }
+
 
         async function pasteClipboardContent() {
             try {
@@ -173,6 +248,7 @@
         document.querySelectorAll('.readonly').forEach(element => {
             element.addEventListener('click', () => copyToClipboard(element));
         });
+
     </script>
 
     <!-- Add icon library -->
@@ -182,20 +258,20 @@
 </head>
 <body>
     <h1>Generador de Información</h1>
-    <form method="POST">
+    <form method="POST" onsubmit="return validateForm()">
         <div class="container">
             <div class="column">
                 <label for="expediente">Expediente:</label><br>
                 <div class="pt-site-footer">
                     <input type="text" id="expediente" name="expediente" tabindex="1" value="{{ expediente }}" required onblur="formatExpediente()">
-                    <button type="button" id="boton_interno" class="boton_interno btn btn-secondary"><i class="fa fa-clone"></i></button>
+                    <button type="button" id="boton_interno" class="boton_interno btn btn-secondary"><i class="fa fa-arrow-down"></i></button>
                 </div><br>
                 
                 <label for="nombre">Nombre:</label><br>
                 <input type="text" id="nombre" name="nombre" tabindex="3" value="{{ nombre }}" required><br>
                 
                 <label for="nig">NIG:</label><br>
-                <input type="text" id="nig" name="nig" tabindex="5" value="380384532024000" required><br>
+                <input type="text" id="nig" name="nig" tabindex="5" value="{{ nig }}"required><br>
             </div>
             <div class="column">
                 <label for="procedimiento">Procedimiento:</label><br>
@@ -305,6 +381,10 @@
         document.getElementById('boton_interno_2').addEventListener('click', () => {
             copyToClipboard(document.getElementById('procedimiento'));
         });
+
+        function validateForm() {
+            return validateNIGLength();
+        }
 
     </script>
 

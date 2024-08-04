@@ -53,12 +53,17 @@ def index():
             f"NIE {nie}"
         )
 
+        # NIG SKa
+        # nig_2 = f"3803845320{expediente_year_code}000{nig}"
+        nig_2 = f"3803845320{expediente_year_code}000{nig}" if len(nig) == 4 else nig
+
+
         return render_template('index.html',
                                expediente=expediente,
                                procedimiento=procedimiento,
                                nombre=nombre,
                                nie=nie,
-                               nig=nig,
+                               nig=nig_2,
                                identificador=identificador,
                                codigo_procedimiento=codigo_procedimiento,
                                procedimiento_num_padded=procedimiento_num_padded,
