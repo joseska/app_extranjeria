@@ -59,8 +59,12 @@ def index():
         nig_2 = f"3803845320{expediente_year_code}000{nig}" if len(nig) == 4 else nig
 
         # Ruta al archivo CSV en la carpeta Descargas
-        downloads_folder = os.path.expanduser('~/Descargas')
-        csv_file_path = os.path.join(downloads_folder, 'informacion_generada.csv')
+        # downloads_folder = os.path.expanduser('~/Descargas')
+        # csv_file_path = os.path.join(downloads_folder, 'informacion_generada.csv')
+
+        # Ruta al archivo CSV en la carpeta static
+        static_folder = os.path.join(os.path.dirname(__file__), 'static')
+        csv_file_path = os.path.join(static_folder, 'informacion_generada.csv')
 
         # Escribir en el archivo CSV
         with open(csv_file_path, mode='w', newline='', encoding='utf-8') as csv_file:
